@@ -81,7 +81,7 @@ class CNN_20(nn.Module):
         )
         # Adjusted in_features size based on the new dimensions
         self.fc = nn.Sequential(nn.Linear(in_features=15360, out_features=2),
-                                nn.Dropout(p=0.5), nn.Softmax(dim=1))  
+                                nn.Dropout(p=0.1), nn.Softmax(dim=1))  
         for layer in [self.conv1, self.conv2, self.conv3, self.fc]:
             self.weights_init_xavier(layer)
 

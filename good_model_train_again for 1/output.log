@@ -1,0 +1,31 @@
+using cpu device
+trainset:window_20_train
+testset:window_20_test
+model:cnn_20
+loss is CrossEntropyLoss()
+optimizer is Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 3e-05
+    maximize: False
+    weight_decay: 0.01
+)
+Epoch [0][5]	 Batch [0][4]	 Training Loss 0.3832	 Accuracy 0.9297	 F1 0.9143	 Time(Iter) 2.6490
+Epoch [0]	 Average training loss 0.3854	 Average validation loss 0.3929	 Average validation accuracy 0.9256	 Average validation f1 0.9072
+Epoch [1][5]	 Batch [0][4]	 Training Loss 0.3856	 Accuracy 0.9297	 F1 0.9091	 Time(Iter) 2.6313
+Epoch [1]	 Average training loss 0.3689	 Average validation loss 0.3762	 Average validation accuracy 0.9421	 Average validation f1 0.9320
+Epoch [2][5]	 Batch [0][4]	 Training Loss 0.3751	 Accuracy 0.9375	 F1 0.9200	 Time(Iter) 2.3418
+Epoch [2]	 Average training loss 0.3657	 Average validation loss 0.3690	 Average validation accuracy 0.9421	 Average validation f1 0.9320
+Epoch [3][5]	 Batch [0][4]	 Training Loss 0.3628	 Accuracy 0.9453	 F1 0.9358	 Time(Iter) 2.7657
+Epoch [3]	 Average training loss 0.3564	 Average validation loss 0.3619	 Average validation accuracy 0.9504	 Average validation f1 0.9423
+Epoch [4][5]	 Batch [0][4]	 Training Loss 0.3690	 Accuracy 0.9531	 F1 0.9333	 Time(Iter) 2.7284
+Epoch [4]	 Average training loss 0.3524	 Average validation loss 0.3559	 Average validation accuracy 0.9669	 Average validation f1 0.9608
+Testing...
+Drawing...
+Draw Done

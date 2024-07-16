@@ -1,4 +1,5 @@
 import torch.optim as torch_optim
+import torch
 
 
 def initialize_optimizer(config, model):
@@ -10,6 +11,8 @@ def initialize_optimizer(config, model):
 
     split_opt_type = opt_type.split('_')
     opt_type = split_opt_type[-1]
+
+    torch.manual_seed(123)
 
     if opt_type in ['sgd', 'nesterov']:
         optim_args.pop('eps', None)

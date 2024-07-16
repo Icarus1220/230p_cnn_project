@@ -73,8 +73,8 @@ class CustomImageDataset(Dataset):
     def __init__(self, root_dir, task=0, transform=None): # 0 for BB, 1 for return, default is BB
         self.root_dir = root_dir
         self.transform = transform
-        self.images = [f for f in os.listdir(root_dir) if f.endswith('.png') and 'nan' not in f]
-        self.task = task
+        self.task = int(task)
+        self.images = [f for f in os.listdir(root_dir) if f.endswith('png') and f.split('_')[3+self.task] != 'nan']
         self.cached_images = {}
 
     def __len__(self):
@@ -95,12 +95,12 @@ class CustomImageDataset(Dataset):
             "buy": 1
         }
 
-        labels = [label_dict[info[3]], label_dict[info[4]]]
+        labels = label_dict[info[3+self.task]]
 
         if self.transform:
             image = self.transform(image)
 
-        return image, labels[self.task], img_name
+        return image, labels, img_name
 
 
 def main(args):
@@ -146,8 +146,9 @@ def main(args):
     train_valid_set = CustomImageDataset(root_dir=os.path.join(current_dir, args.trainset), task=int(args.task), transform=transform_train)
     test_set = CustomImageDataset(root_dir=os.path.join(current_dir, args.testset), task=int(args.task), transform=transform_test)
     
-    train_size = int(0.9 * len(train_valid_set))
+    train_size = int(0.89 * len(train_valid_set))
     valid_size = len(train_valid_set) - train_size
+    torch.manual_seed(123)
     train_set, valid_set = random_split(train_valid_set, [train_size, valid_size])
 
     train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True, num_workers=2)
@@ -159,8 +160,8 @@ def main(args):
 
     if args.use_pretrained == 1:
         model.load_state_dict(torch.load('my_model.pth'))
-    else:
-        model_trained, best_model, train_los, train_acc, train_f1, val_los, val_acc, val_f1, early_stop_epoch = train(
+
+    model_trained, best_model, train_los, train_acc, train_f1, val_los, val_acc, val_f1, early_stop_epoch = train(
             model=model,
             criterion=criterion,
             train_loader=train_loader,
@@ -170,7 +171,7 @@ def main(args):
             device=device,
             max_epoch=args.epoch,
             disp_freq=100
-        )
+    )
     
     test_result_df = test(
         model=best_model,
@@ -194,6 +195,11 @@ def main(args):
         args.opt) + '_wd' + str(args.weight_decay) + '_epoch' + str(args.epoch)
     if args.use_pretrained != 1:
         torch.save(best_model.state_dict(), prefix + '_model.pth')
+        plot_loss_and_acc({'model_train': [train_los, train_acc]}, {'model_val':  [val_los, val_acc]}, path)
+        print("Draw Done", file=fp)
+        print("Draw Done")
+    else:
+        torch.save(best_model.state_dict(), prefix + '_updated_model.pth')
         plot_loss_and_acc({'model_train': [train_los, train_acc]}, {'model_val':  [val_los, val_acc]}, path)
         print("Draw Done", file=fp)
         print("Draw Done")

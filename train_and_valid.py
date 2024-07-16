@@ -81,6 +81,9 @@ def train_one_epoch(model: torch.nn.Module, criterion,
         batch_train_loss.append(loss.detach().item())
 
         _, predicted = torch.max(output, 1)
+        print(f"train output: {output}")
+        print(f"train label pred: {predicted}")
+        print(f"train true label: {labels}")
 
         accuracy.update(predicted, labels)
         f1.update(predicted, labels)
@@ -89,11 +92,12 @@ def train_one_epoch(model: torch.nn.Module, criterion,
 
         if iteration % disp_freq == 0:
             batch_acc = accuracy.compute().item()
+            batch_f1 = f1.compute().item()
             batch_avg_loss = np.mean(batch_train_loss)
             fp = open('output.log', 'a+')
-            print(f"Epoch [{epoch}][{max_epoch}]\t Batch [{iteration}][{max_train_iteration}]\t Training Loss {batch_avg_loss:.4f}\t Accuracy {batch_acc:.4f}\t Time(Iter) {batch_time:.4f}", file=fp)
+            print(f"Epoch [{epoch}][{max_epoch}]\t Batch [{iteration}][{max_train_iteration}]\t Training Loss {batch_avg_loss:.4f}\t Accuracy {batch_acc:.4f}\t F1 {batch_f1:.4f}\t Time(Iter) {batch_time:.4f}", file=fp)
             fp.close()
-            print(f"Epoch [{epoch}][{max_epoch}]\t Batch [{iteration}][{max_train_iteration}]\t Training Loss {batch_avg_loss:.4f}\t Accuracy {batch_acc:.4f}\t Time(Iter) {batch_time:.4f}")
+            print(f"Epoch [{epoch}][{max_epoch}]\t Batch [{iteration}][{max_train_iteration}]\t Training Loss {batch_avg_loss:.4f}\t Accuracy {batch_acc:.4f}\t F1 {batch_f1:.4f}\t Time(Iter) {batch_time:.4f}")
     batch_acc = accuracy.compute().item()
     batch_f1 = f1.compute().item()
     return batch_train_loss, batch_acc, batch_f1
