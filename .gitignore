@@ -1,4 +1,4 @@
 # Ignore Jupyter Notebook checkpoints
 .ipynb_checkpoints/
-__pychache__/
+__pycache__/
 window_*/
